@@ -32,3 +32,5 @@ object Captcha extends Controller with scaptcha.Captcha {
 ## Build
 
 `sbt package`
+
+[![Build Status](https://travis-ci.org/cchantep/scaptcha.png)](https://travis-ci.org/cchantep/scaptcha)
