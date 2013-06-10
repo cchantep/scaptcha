@@ -6,6 +6,13 @@ import java.util.{ Calendar, Date }
 
 import java.awt.{ Color, Font }
 
+case class CaptchaText(
+  value: String,
+  code: Int) {
+
+  override val toString = value
+}
+
 trait Captcha {
   def key: String
 
@@ -15,14 +22,17 @@ trait Captcha {
       background.getOrElse(Color.WHITE),
       Font.decode(null).deriveFont(20.0f))
 
-  def temporalText(len: Int, time: Date = new Date()): String = {
+  def temporalText(len: Int, time: Date = new Date()): CaptchaText = {
     val cal = Calendar.getInstance()
     cal.setTime(time)
 
-    val from = cal.get(Calendar.SECOND)
+    val code = cal.get(Calendar.SECOND)
 
-    keyStream.slice(from, from + len).mkString
+    CaptchaText(keyStream.slice(code, code + len).mkString, code)
   }
+
+  def matches(code: Int, text: String): Boolean = 
+    keyStream.slice(code, code + text.length).mkString == text
 
   private def keyStream: Stream[Char] = new Iterator[Char] {
     def hasNext = true

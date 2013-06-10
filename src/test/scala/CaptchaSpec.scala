@@ -7,11 +7,22 @@ object CaptchaSpec extends Specification with Captcha with CaptchaFixtures {
 
   "Temporal text" should {
     "be expected one for combination 0" in {
-      temporalText(5, sec0) aka "text" mustEqual "ABCDE"
+      temporalText(5, sec0).toString aka "text" mustEqual "ABCDE"
     }
 
     "be expected one for combination 30" in {
-      temporalText(3, sec30) aka "text" mustEqual "EFG"
+      temporalText(3, sec30).toString aka "text" mustEqual "EFG"
+    }
+  }
+
+  "Reverse check" should {
+    "be ok" in {
+      (matches(0, "ABCDE") aka "matches 0" must beTrue).
+        and(matches(30, "EFG") aka "matches 30" must beTrue)
+    }
+
+    "not be ok" in {
+      matches(0, "EFG") aka "matches 0" must beFalse
     }
   }
 }

@@ -15,6 +15,8 @@ object ImageSpec extends Specification with ImageFixtures {
 
       IOUtils.copy(imageStream, b)
 
+      println("FONT: %s" format java.awt.Font.decode(null))
+
       Seq(b.toByteArray: _*) aka "image" mustEqual bytes
     }
   }
