@@ -1,4 +1,4 @@
 language: scala
-env: JAVA_OPTS="-Dtravis=yes -Xms32m -Xmx128m"
+script: "sbt -J-Xms32m -J-Xmx128m -J-Dtravis=yes ++2.10.0 test"
 scala:
    - 2.10.0
