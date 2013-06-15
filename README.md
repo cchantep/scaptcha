@@ -2,6 +2,8 @@
 
 Scala captcha, or Simple captcha, and probably both Simple Scala (functional) captcha.
 
+[![Build Status](https://travis-ci.org/cchantep/scaptcha.png)](https://travis-ci.org/cchantep/scaptcha)
+
 ## Usage
 
 ### SBT
@@ -56,5 +58,3 @@ Captcha.matches(captchaCode,passphrase) // Boolean
 ## Build
 
 `sbt package`
-
-[![Build Status](https://travis-ci.org/cchantep/scaptcha.png)](https://travis-ci.org/cchantep/scaptcha)
