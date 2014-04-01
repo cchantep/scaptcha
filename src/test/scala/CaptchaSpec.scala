@@ -7,11 +7,11 @@ object CaptchaSpec extends Specification with Captcha with CaptchaFixtures {
 
   "Temporal text" should {
     "be expected one for combination 0" in {
-      temporalText(5, sec0).toString aka "text" mustEqual "ABCDE"
+      temporalCaptcha(5, sec0).toString aka "text" mustEqual "ABCDE"
     }
 
     "be expected one for combination 30" in {
-      temporalText(3, sec30).toString aka "text" mustEqual "EFG"
+      temporalCaptcha(3, sec30).toString aka "text" mustEqual "EFG"
     }
   }
 
@@ -30,7 +30,7 @@ object CaptchaSpec extends Specification with Captcha with CaptchaFixtures {
 sealed trait CaptchaFixtures {
   import java.util.Calendar
 
-  lazy val key = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  lazy val seed = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
   lazy val sec0 = { 
     cal.set(Calendar.SECOND, 0)

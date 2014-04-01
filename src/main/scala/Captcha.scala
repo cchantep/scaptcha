@@ -6,7 +6,7 @@ import java.util.{ Calendar, Date }
 
 import java.awt.{ Color, Font }
 
-case class CaptchaText(
+case class CaptchaInfo(
   value: String,
   code: Int) {
 
@@ -14,37 +14,70 @@ case class CaptchaText(
 }
 
 trait Captcha {
-  def key: String
+  /** Alphanumeric seed */
+  def seed: String
 
+  /**
+   * (First integration step)
+   * Returns captcha information (value & code), generated using seed.
+   * [[CaptchaInfo.value]] must be then passed to [[textImage]] (text arg).
+   * 
+   * {{{
+   * // Generates information for a temporal captcha with 8 characters
+   * val info: CaptchaInfo = captchaInst.temporalCaptcha(8)
+   * 
+   * // then
+   * val imgStream: java.io.InputStream = textImage(info.value)
+   * // ready to display provided image stream of captcha
+   * }}}
+   * 
+   * @param len Length of generated catcha
+   * @param time Captcha time (temporal marker)
+   */
+  def temporalCaptcha(len: Int, time: Date = new Date()): CaptchaInfo = {
+    val cal = Calendar.getInstance()
+    cal.setTime(time)
+
+    val code = cal.get(Calendar.SECOND)
+
+    CaptchaInfo(keyStream.slice(code, code + len).mkString, code)
+  }
+
+  /**
+   * Returns image stream (image/png) generated for catcha `text`.
+   * 
+   * @param text Previously generated [[CatchaInfo.value]]
+   * @param background Image background color
+   * @param foreground Image foreground color
+   */
   def textImage(text: String, background: Option[Color] = None, foreground: Option[Color] = None): InputStream =
     Image.stream(124, 30, 5, 22, text,
       foreground.getOrElse(Color.BLACK),
       background.getOrElse(Color.WHITE),
       Font.decode(null).deriveFont(20.0f))
 
-  def temporalText(len: Int, time: Date = new Date()): CaptchaText = {
-    val cal = Calendar.getInstance()
-    cal.setTime(time)
-
-    val code = cal.get(Calendar.SECOND)
-
-    CaptchaText(keyStream.slice(code, code + len).mkString, code)
-  }
-
+  /**
+   * Checks whether `text` typed in form is matching catcha 
+   * whose `code` is specified one.
+   * 
+   * @param code Previously generated [[CatchaInfo.code]]
+   * @param text Text typed by user in form
+   * @return true if `text` matches specified catcha, or false
+   */
   def matches(code: Int, text: String): Boolean = 
     keyStream.slice(code, code + text.length).mkString == text
 
-  private def keyStream: Stream[Char] = new Iterator[Char] {
+  private lazy val keyStream: Stream[Char] = new Iterator[Char] {
     def hasNext = true
 
     var i = 0
     def next(): Char = {
-      if (i == key.length) {
+      if (i == seed.length) {
         i = 1
-        key.charAt(0)
+        seed.charAt(0)
       } else {
         i += 1
-        key.charAt(i - 1)
+        seed.charAt(i - 1)
       }
     }
   }.toStream
