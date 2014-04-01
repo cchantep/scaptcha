@@ -10,7 +10,11 @@ Scala captcha, or Simple captcha, and probably both Simple Scala (functional) ca
 
 To use SCaptcha in your SBT (or Play) projects, you can either built it yourself (see thereafter), or add following resolver:
 
-`"Applicius Snapshots" at "https://raw.github.com/applicius/mvn-repo/master/snapshots/"`
+```scala
+resolvers += "Applicius Snapshots" at "https://raw.github.com/applicius/mvn-repo/master/snapshots/"
+
+libraryDependencies += "scaptcha" %% "scaptcha" % "1.0-SNAPSHOT"
+```
 
 ### Playframework
 
