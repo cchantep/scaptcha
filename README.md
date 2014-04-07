@@ -58,7 +58,7 @@ object Captcha extends Controller with scaptcha.Captcha {
 Finally, when form including captcha is submitted, it can be checked easily:
 
 ```scala
-Captcha.matches(captchaCode/* catcha.code */, passphrase) // Boolean
+Captcha.matches(captchaCode/* catcha.code */, length/* of captcha.value */, passphrase) // Boolean
 ```
 
 ## Build

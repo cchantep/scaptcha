@@ -2,9 +2,9 @@ organization := "scaptcha"
 
 name := "scaptcha"
 
-version := "1.1-SNAPSHOT"
+version := "1.1.1"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 

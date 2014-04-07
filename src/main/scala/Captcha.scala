@@ -38,7 +38,7 @@ trait Captcha {
     val cal = Calendar.getInstance()
     cal.setTime(time)
 
-    val code = cal.get(Calendar.SECOND)
+    val code = cal.get(Calendar.MILLISECOND % 100)
 
     CaptchaInfo(keyStream.slice(code, code + len).mkString, code)
   }
@@ -50,8 +50,8 @@ trait Captcha {
    * @param background Image background color
    * @param foreground Image foreground color
    */
-  def textImage(text: String, background: Option[Color] = None, foreground: Option[Color] = None): InputStream =
-    Image.stream(124, 30, 5, 22, text,
+  def textImage(text: String, background: Option[Color] = None, foreground: Option[Color] = None, width: Int = 124, height: Int = 30): InputStream =
+    Image.stream(width, height, 5, 22, text,
       foreground.getOrElse(Color.BLACK),
       background.getOrElse(Color.WHITE),
       Font.decode(null).deriveFont(20.0f))
@@ -61,11 +61,12 @@ trait Captcha {
    * whose `code` is specified one.
    * 
    * @param code Previously generated [[CatchaInfo.code]]
+   * @param length Length of previously generated [[CatchaInfo.value]]
    * @param text Text typed by user in form
    * @return true if `text` matches specified catcha, or false
    */
-  def matches(code: Int, text: String): Boolean = 
-    keyStream.slice(code, code + text.length).mkString == text
+  def matches(code: Int, length: Int, text: String): Boolean =
+    keyStream.slice(code, code + length).mkString == text
 
   private lazy val keyStream: Stream[Char] = new Iterator[Char] {
     def hasNext = true
