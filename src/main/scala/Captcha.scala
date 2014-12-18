@@ -38,7 +38,7 @@ trait Captcha {
     val cal = Calendar.getInstance()
     cal.setTime(time)
 
-    val code = cal.get(Calendar.MILLISECOND % 100)
+    val code = cal.get(Calendar.MILLISECOND) % 100
 
     CaptchaInfo(keyStream.slice(code, code + len).mkString, code)
   }
